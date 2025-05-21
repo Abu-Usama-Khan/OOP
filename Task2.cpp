@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 class Student{
@@ -34,15 +35,15 @@ class Student{
 		}
 		
 		// Copy Constructor
-    	Student(const Student& other) 
-        : name(new string(*other.name)),  // Deep copy name
-          rollNum(other.rollNum),
-          math(other.math),
-          english(other.english),
-          science(other.science),
-          total(other.total) {
-        cout << "Copy constructor called for " << *name << endl;
-    }
+    	Student(const Student& other) {
+    		this->name = new string(*other.name);
+	        this->rollNum = other.rollNum;
+	        this->math = other.math;
+	        this->english = other.english;
+	        this->science = other.science;
+	        this->total = other.total;
+    		cout << "Copy constructor called!" <<endl;
+		}
 		
 		//Destructor
 		~Student() {
@@ -113,11 +114,11 @@ class Student{
 		}
 };
 
-void sortStudents(Student students[], int size) {
+void sortStudents(Student* students[], int size) {
     for(int i = 0; i < size-1; i++) {
         for(int j = 0; j < size-i-1; j++) {
-            if(students[j].getTotalMarks() < students[j+1].getTotalMarks()) {
-                Student temp = students[j];
+            if(students[j]->getTotalMarks() < students[j+1]->getTotalMarks()) {
+                Student* temp = students[j];
                 students[j] = students[j+1];
                 students[j+1] = temp;
             }
@@ -129,7 +130,7 @@ void sortStudents(Student students[], int size) {
 int main() {
     Student* students[5];
 
-	//Objects creation using dynamic allocation in array(got idea through deep seek)
+	//Objects creation using dynamic allocation in array
     students[0] = new Student(85, 90, 95);
     students[0]->setName("Abu Usama Khan");
     students[0]->setRollNumber(101);
@@ -152,7 +153,7 @@ int main() {
     students[3]->setEnglishMarks(82);
     students[3]->setScienceMarks(88);
 
-    students[4] = students[0];
+    students[4] = new Student(*students[0]);
     students[4]->setName("Syed Furquan");
     students[4]->setRollNumber(105);
     
@@ -165,7 +166,7 @@ int main() {
     }
 
     //Sort students
-    sortStudents(*students, 5);
+    sortStudents(students, 5);
 
     // Display after sorting
     cout <<"After sorting:\n";
