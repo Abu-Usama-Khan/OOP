@@ -33,6 +33,17 @@ class Student{
 			setTotalMarks();
 		}
 		
+		// Copy Constructor
+    	Student(const Student& other) 
+        : name(new string(*other.name)),  // Deep copy name
+          rollNum(other.rollNum),
+          math(other.math),
+          english(other.english),
+          science(other.science),
+          total(other.total) {
+        cout << "Copy constructor called for " << *name << endl;
+    }
+		
 		//Destructor
 		~Student() {
         	delete name;
@@ -92,6 +103,7 @@ class Student{
 		}
 		
 		void displayStudent() {
+			cout <<endl;
 			getname();
 			getRollNumber();
 			getMathMarks();
@@ -113,43 +125,58 @@ void sortStudents(Student students[], int size) {
     }
 }
 
+
 int main() {
-    Student students[5];
+    Student* students[5];
 
-    students[0] = Student(85, 90, 95);
-    students[0].setName("Ali Khan");
-    students[0].setRollNumber(101);
+	//Objects creation using dynamic allocation in array(got idea through deep seek)
+    students[0] = new Student(85, 90, 95);
+    students[0]->setName("Abu Usama Khan");
+    students[0]->setRollNumber(101);
 
-    students[1] = Student(78, 88);
-    students[1].setName("Fatima Ahmed");
-    students[1].setRollNumber(102);
+    students[1] = new Student(78, 88);
+    students[1]->setName("Asad Mehmood");
+    students[1]->setRollNumber(102);
+    students[1]->setScienceMarks(73);
 
-    students[2] = Student(92);
-    students[2].setName("Usman Malik");
-    students[2].setRollNumber(103);
+    students[2] = new Student(92);
+    students[2]->setName("Abdul Quddus");
+    students[2]->setRollNumber(103);
+    students[2]->setEnglishMarks(56);
+    students[2]->setScienceMarks(68);
 
-    students[3] = Student();
-    students[3].setName("Bilal Hussain");
-    students[3].setRollNumber(104);
-    students[3].setMathMarks(75);
-    students[3].setEnglishMarks(82);
-    students[3].setScienceMarks(88);
+    students[3] = new Student();
+    students[3]->setName("Ahmer Ali");
+    students[3]->setRollNumber(104);
+    students[3]->setMathMarks(75);
+    students[3]->setEnglishMarks(82);
+    students[3]->setScienceMarks(88);
 
-    students[4] = Student(90, 85, 80);
-    students[4].setName("Ayesha Raza");
-    students[4].setRollNumber(105);
+    students[4] = students[0];
+    students[4]->setName("Syed Furquan");
+    students[4]->setRollNumber(105);
+    
+    
 
+    //Display before sorting
     cout << "Before sorting:\n";
-    for(int i = 0; i < 5; i++) {
-        students[i].displayStudent();
+    for (int i = 0; i < 5; i++) {
+        students[i]->displayStudent();
     }
 
-    sortStudents(students, 5);
+    //Sort students
+    sortStudents(*students, 5);
 
-    cout << "After sorting:\n";
-    for(int i = 0; i < 5; i++) {
-        students[i].displayStudent();
+    // Display after sorting
+    cout <<"After sorting:\n";
+    for (int i = 0; i < 5; i++) {
+        students[i]->displayStudent();
     }
 
-	return 0;	
+    //Removing objects
+    for (int i = 0; i < 5; i++) {
+        delete students[i];
+    }
+
+    return 0;
 }
